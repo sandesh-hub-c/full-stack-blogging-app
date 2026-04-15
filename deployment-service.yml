@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: bloggingapp-deployment
+  namespace: webapps   # 👈 ADD HERE
 spec:
   selector:
     matchLabels:
@@ -14,22 +15,24 @@ spec:
     spec:
       containers:
         - name: bloggingapp
-          image: ugogabriel/gab-blogging-app:latest # Updated image to private DockerHub image
+          image: sandesh12345/blogging-app:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
       imagePullSecrets:
-        - name: regcred # Reference to the Docker registry secret
+        - name: regcred
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: bloggingapp-ssvc
+  namespace: webapps   # 👈 ADD HERE
 spec:
   selector:
     app: bloggingapp
   ports:
     - protocol: "TCP"
       port: 80
-      targetPort: 8080 
+      targetPort: 8080
   type: LoadBalancer
